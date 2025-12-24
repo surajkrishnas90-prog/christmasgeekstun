@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Season Wishes 🎄✨</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        height: 100vh;
+        font-family: 'Segoe UI', sans-serif;
+        background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+        color: white;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
+        text-align: center;
+    }
+
+    .screen {
+        display: none;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .active {
+        display: flex;
+    }
+
+    button {
+        padding: 15px 30px;
+        font-size: 18px;
+        border: none;
+        border-radius: 30px;
+        cursor: pointer;
+        background: #ffcc00;
+        color: #000;
+        font-weight: bold;
+        box-shadow: 0 0 15px rgba(255,204,0,0.6);
+    }
+
+    .loader {
+        font-size: 22px;
+        animation: blink 1s infinite;
+    }
+
+    @keyframes blink {
+        50% { opacity: 0.4; }
+    }
+
+    .balloon {
+        position: absolute;
+        bottom: -100px;
+        width: 40px;
+        height: 55px;
+        border-radius: 50%;
+        animation: float 6s linear infinite;
+    }
+
+    @keyframes float {
+        from { transform: translateY(0); }
+        to { transform: translateY(-120vh); }
+    }
+
+    #randomBtn {
+        position: absolute;
+        display: none;
+    }
+
+    .message-box {
+        max-width: 90%;
+        background: rgba(0,0,0,0.6);
+        padding: 20px;
+        border-radius: 15px;
+        font-size: 18px;
+        line-height: 1.6;
+        animation: fadeIn 2s;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+</style>
+</head>
+
+<body>
+
+<!-- Screen 1 -->
+<div class="screen active" id="startScreen">
+    <button onclick="start()">🎁 Click to Unbox</button>
+</div>
+
+<!-- Screen 2 -->
+<div class="screen" id="loadingScreen">
+    <div class="loader">Loading your surprise... ✨</div>
+</div>
+
+<!-- Screen 3 -->
+<div class="screen" id="mainScreen">
+    <button id="randomBtn" onclick="handleClick()">💌 Click Here</button>
+</div>
+
+<!-- Screen 4 -->
+<div class="screen" id="messageScreen">
+    <div class="message-box">
+        <p>🎄✨ <strong>To all my dear friends who came into my life,</strong></p>
+        <p>
+            Wishing you a very Happy Christmas and a Happy New Year in advance.
+        </p>
+        <p>
+            This year was a tragic and challenging one for me — I lost some friends,
+            gained some new ones, and learned who truly mattered.
+        </p>
+        <p>
+            Through all the ups and downs, every moment shaped me into a stronger person.
+        </p>
+        <p>
+            Grateful for the memories, the lessons, and the people who stayed.
+        </p>
+        <p>
+            Hoping the coming year brings peace, growth, and better days for all of us. 🤍
+        </p>
+    </div>
+</div>
+
+<script>
+let clickCount = 0;
+
+function start() {
+    switchScreen("startScreen", "loadingScreen");
+
+    setTimeout(() => {
+        switchScreen("loadingScreen", "mainScreen");
+        createBalloons();
+        showRandomButton();
+    }, 3500);
+}
+
+function switchScreen(hide, show) {
+    document.getElementById(hide).classList.remove("active");
+    document.getElementById(show).classList.add("active");
+}
+
+function createBalloons() {
+    for (let i = 0; i < 15; i++) {
+        let balloon = document.createElement("div");
+        balloon.className = "balloon";
+        balloon.style.left = Math.random() * 100 + "vw";
+        balloon.style.background =
+            "hsl(" + Math.random() * 360 + ", 70%, 60%)";
+        balloon.style.animationDuration = (4 + Math.random() * 4) + "s";
+        document.body.appendChild(balloon);
+    }
+}
+
+function showRandomButton() {
+    let btn = document.getElementById("randomBtn");
+    btn.style.display = "block";
+    btn.style.left = Math.random() * 70 + "vw";
+    btn.style.top = Math.random() * 70 + "vh";
+}
+
+function handleClick() {
+    clickCount++;
+    let btn = document.getElementById("randomBtn");
+
+    if (clickCount === 1) {
+        btn.style.display = "none";
+        setTimeout(showRandomButton, 1200);
+    } else {
+        switchScreen("mainScreen", "messageScreen");
+        btn.style.display = "none";
+    }
+}
+</script>
+
+</body>
+</html>
