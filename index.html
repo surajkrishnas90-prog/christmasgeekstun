@@ -2,180 +2,197 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Season Wishes 🎄✨</title>
+<title>Season Surprise 🎄✨</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
-    body {
-        margin: 0;
-        padding: 0;
-        height: 100vh;
-        font-family: 'Segoe UI', sans-serif;
-        background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
-        color: white;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        overflow: hidden;
-        text-align: center;
-    }
+body {
+    margin: 0;
+    height: 100vh;
+    background: radial-gradient(circle, #0b1d2a, #020c14);
+    color: white;
+    font-family: 'Segoe UI', sans-serif;
+    overflow: hidden;
+    text-align: center;
+}
 
-    .screen {
-        display: none;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-    }
+.screen {
+    display: none;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
 
-    .active {
-        display: flex;
-    }
+.active { display: flex; }
 
-    button {
-        padding: 15px 30px;
-        font-size: 18px;
-        border: none;
-        border-radius: 30px;
-        cursor: pointer;
-        background: #ffcc00;
-        color: #000;
-        font-weight: bold;
-        box-shadow: 0 0 15px rgba(255,204,0,0.6);
-    }
+button {
+    padding: 14px 26px;
+    font-size: 18px;
+    border-radius: 30px;
+    border: none;
+    background: #ffd700;
+    color: #000;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 15px;
+}
 
-    .loader {
-        font-size: 22px;
-        animation: blink 1s infinite;
-    }
+input {
+    padding: 12px;
+    font-size: 16px;
+    border-radius: 20px;
+    border: none;
+    outline: none;
+    text-align: center;
+}
 
-    @keyframes blink {
-        50% { opacity: 0.4; }
-    }
+.gifts {
+    display: flex;
+    gap: 20px;
+    margin-top: 20px;
+}
 
-    .balloon {
-        position: absolute;
-        bottom: -100px;
-        width: 40px;
-        height: 55px;
-        border-radius: 50%;
-        animation: float 6s linear infinite;
-    }
+.gift {
+    font-size: 50px;
+    cursor: pointer;
+    transition: transform 0.3s;
+}
 
-    @keyframes float {
-        from { transform: translateY(0); }
-        to { transform: translateY(-120vh); }
-    }
+.gift:hover {
+    transform: scale(1.3);
+}
 
-    #randomBtn {
-        position: absolute;
-        display: none;
-    }
+.snow {
+    position: absolute;
+    top: -10px;
+    width: 6px;
+    height: 6px;
+    background: white;
+    border-radius: 50%;
+    opacity: 0.8;
+    animation: fall linear infinite;
+}
 
-    .message-box {
-        max-width: 90%;
-        background: rgba(0,0,0,0.6);
-        padding: 20px;
-        border-radius: 15px;
-        font-size: 18px;
-        line-height: 1.6;
-        animation: fadeIn 2s;
-    }
+@keyframes fall {
+    to { transform: translateY(110vh); }
+}
 
-    @keyframes fadeIn {
-        from { opacity: 0; }
-        to { opacity: 1; }
-    }
+.message-box {
+    max-width: 90%;
+    padding: 20px;
+    background: rgba(0,0,0,0.6);
+    border-radius: 15px;
+    animation: fade 2s;
+}
+
+@keyframes fade {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
 </style>
 </head>
 
 <body>
 
+<audio id="clickSound" src="https://assets.mixkit.co/sfx/preview/mixkit-modern-click-box-check-1120.mp3"></audio>
+<audio id="bgMusic" src="https://assets.mixkit.co/music/preview/mixkit-christmas-magic-1093.mp3" loop></audio>
+
 <!-- Screen 1 -->
-<div class="screen active" id="startScreen">
-    <button onclick="start()">🎁 Click to Unbox</button>
+<div id="start" class="screen active">
+    <button onclick="goName()">🎁 Tap to Unbox</button>
 </div>
 
 <!-- Screen 2 -->
-<div class="screen" id="loadingScreen">
-    <div class="loader">Loading your surprise... ✨</div>
+<div id="nameScreen" class="screen">
+    <h2>👀 Before we continue…</h2>
+    <input id="username" placeholder="Enter your name">
+    <button onclick="startGame()">Continue ✨</button>
 </div>
 
 <!-- Screen 3 -->
-<div class="screen" id="mainScreen">
-    <button id="randomBtn" onclick="handleClick()">💌 Click Here</button>
+<div id="game" class="screen">
+    <h2>🎁 Find the right gift</h2>
+    <p>(Only one holds the surprise 😉)</p>
+    <div class="gifts">
+        <div class="gift" onclick="checkGift(0)">🎁</div>
+        <div class="gift" onclick="checkGift(1)">🎁</div>
+        <div class="gift" onclick="checkGift(2)">🎁</div>
+        <div class="gift" onclick="checkGift(3)">🎁</div>
+    </div>
+    <p id="hint"></p>
 </div>
 
 <!-- Screen 4 -->
-<div class="screen" id="messageScreen">
+<div id="message" class="screen">
     <div class="message-box">
-        <p>🎄✨ <strong>To all my dear friends who came into my life,</strong></p>
-        <p>
-            Wishing you a very Happy Christmas and a Happy New Year in advance.
-        </p>
-        <p>
-            This year was a tragic and challenging one for me — I lost some friends,
-            gained some new ones, and learned who truly mattered.
-        </p>
-        <p>
-            Through all the ups and downs, every moment shaped me into a stronger person.
-        </p>
-        <p>
-            Grateful for the memories, the lessons, and the people who stayed.
-        </p>
-        <p>
-            Hoping the coming year brings peace, growth, and better days for all of us. 🤍
-        </p>
+        <p id="finalText"></p>
     </div>
 </div>
 
 <script>
-let clickCount = 0;
+let correctGift = Math.floor(Math.random() * 4);
+let userName = "my friend";
 
-function start() {
-    switchScreen("startScreen", "loadingScreen");
+function vibrate() {
+    if (navigator.vibrate) navigator.vibrate(50);
+}
 
-    setTimeout(() => {
-        switchScreen("loadingScreen", "mainScreen");
-        createBalloons();
-        showRandomButton();
-    }, 3500);
+function playClick() {
+    document.getElementById("clickSound").play();
+}
+
+function startSnow() {
+    setInterval(() => {
+        let snow = document.createElement("div");
+        snow.className = "snow";
+        snow.style.left = Math.random() * 100 + "vw";
+        snow.style.animationDuration = 3 + Math.random() * 5 + "s";
+        document.body.appendChild(snow);
+        setTimeout(() => snow.remove(), 8000);
+    }, 200);
+}
+
+function goName() {
+    playClick(); vibrate();
+    switchScreen("start", "nameScreen");
+}
+
+function startGame() {
+    playClick(); vibrate();
+    let nameInput = document.getElementById("username").value.trim();
+    if (nameInput) userName = nameInput;
+    document.getElementById("bgMusic").play();
+    startSnow();
+    switchScreen("nameScreen", "game");
+}
+
+function checkGift(index) {
+    playClick(); vibrate();
+    let hint = document.getElementById("hint");
+    if (index === correctGift) {
+        showMessage();
+    } else {
+        hint.innerText = "❌ Nope 😅 Try again!";
+    }
+}
+
+function showMessage() {
+    switchScreen("game", "message");
+    document.getElementById("finalText").innerHTML = `
+        💌 <strong>This message is for you, ${userName}</strong><br><br>
+        🎄✨ Wishing you a very Happy Christmas and a Happy New Year in advance.<br><br>
+        This year was a tragic and challenging one for me — I lost some friends,
+        gained some new ones, and learned who truly mattered.<br><br>
+        Through all the ups and downs, every moment shaped me into a stronger person.<br><br>
+        Grateful for the memories, the lessons, and the people who stayed.<br><br>
+        Hoping the coming year brings peace, growth, and better days for all of us. 🤍
+    `;
 }
 
 function switchScreen(hide, show) {
     document.getElementById(hide).classList.remove("active");
     document.getElementById(show).classList.add("active");
-}
-
-function createBalloons() {
-    for (let i = 0; i < 15; i++) {
-        let balloon = document.createElement("div");
-        balloon.className = "balloon";
-        balloon.style.left = Math.random() * 100 + "vw";
-        balloon.style.background =
-            "hsl(" + Math.random() * 360 + ", 70%, 60%)";
-        balloon.style.animationDuration = (4 + Math.random() * 4) + "s";
-        document.body.appendChild(balloon);
-    }
-}
-
-function showRandomButton() {
-    let btn = document.getElementById("randomBtn");
-    btn.style.display = "block";
-    btn.style.left = Math.random() * 70 + "vw";
-    btn.style.top = Math.random() * 70 + "vh";
-}
-
-function handleClick() {
-    clickCount++;
-    let btn = document.getElementById("randomBtn");
-
-    if (clickCount === 1) {
-        btn.style.display = "none";
-        setTimeout(showRandomButton, 1200);
-    } else {
-        switchScreen("mainScreen", "messageScreen");
-        btn.style.display = "none";
-    }
 }
 </script>
 
